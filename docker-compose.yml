@@ -1,0 +1,38 @@
+services:
+  # scrapy:
+  #   build: .
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - mongodb
+  #   networks:
+  #     - mynetwork
+  scrapy:
+    build: .
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/goodreads_db # Khi chạy trong Docker, kết nối đến container MongoDB
+    volumes:
+      - .:/app
+    working_dir: /app
+    # command: scrapy crawl goodreads_spider
+    networks:
+      - mynetwork
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+
+
+volumes:
+  mongo_data:
